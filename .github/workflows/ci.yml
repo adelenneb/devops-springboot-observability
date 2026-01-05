@@ -57,12 +57,14 @@ jobs:
         run: |
           tags="${REGISTRY}/${IMAGE_NAME}:${GITHUB_SHA}"
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
-            tags="${tags}\n${REGISTRY}/${IMAGE_NAME}:${GITHUB_REF_NAME}"
-            tags="${tags}\n${REGISTRY}/${IMAGE_NAME}:latest"
+            tags="${tags}"$'\n'"${REGISTRY}/${IMAGE_NAME}:${GITHUB_REF_NAME}"
+            tags="${tags}"$'\n'"${REGISTRY}/${IMAGE_NAME}:latest"
           fi
-          echo "tags<<'EOF'" >> "$GITHUB_OUTPUT"
-          echo -e "${tags}" >> "$GITHUB_OUTPUT"
-          echo "EOF" >> "$GITHUB_OUTPUT"
+          {
+            echo "tags<<EOF"
+            printf "%s\n" "${tags}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
