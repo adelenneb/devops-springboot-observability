@@ -69,7 +69,6 @@ jobs:
       - name: Deploy manifests
         run: |
           bash ci/scripts/deploy-k8s.sh
-          kubectl set image deployment/fifth-app fifth-app=${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} -n devops-demo
         env:
           REGISTRY: ${{ env.REGISTRY }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
