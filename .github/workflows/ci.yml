@@ -25,6 +25,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Make mvnw executable
+        run: chmod +x app/mvnw
+
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
