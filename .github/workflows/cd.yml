@@ -3,6 +3,7 @@ name: CD
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -58,6 +59,11 @@ jobs:
           chmod 600 "$HOME/.kube/config"
         env:
           KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }}
+
+      - name: Debug kubeconfig
+        run: |
+          kubectl config view --raw --minify
+          kubectl version --short
 
       - name: Deploy manifests
         run: |
