@@ -57,6 +57,7 @@ jobs:
           mkdir -p "$HOME/.kube"
           echo "${KUBECONFIG_BASE64}" | base64 -d > "$HOME/.kube/config"
           chmod 600 "$HOME/.kube/config"
+          echo "KUBECONFIG=$HOME/.kube/config" >> "$GITHUB_ENV"
         env:
           KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }}
 
@@ -70,7 +71,6 @@ jobs:
           bash ci/scripts/deploy-k8s.sh
           kubectl set image deployment/fifth-app fifth-app=${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} -n devops-demo
         env:
-          KUBECONFIG: $HOME/.kube/config
           REGISTRY: ${{ env.REGISTRY }}
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
           IMAGE_TAG: ${{ env.IMAGE_TAG }}
