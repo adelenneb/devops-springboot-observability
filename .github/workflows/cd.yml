@@ -61,11 +61,6 @@ jobs:
         env:
           KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }}
 
-      - name: Debug kubeconfig
-        run: |
-          kubectl config view --raw --minify
-          kubectl version --client=true
-
       - name: Deploy manifests
         run: |
           bash ci/scripts/deploy-k8s.sh
