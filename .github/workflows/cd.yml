@@ -63,7 +63,7 @@ jobs:
       - name: Debug kubeconfig
         run: |
           kubectl config view --raw --minify
-          kubectl version --short
+          kubectl version --client=true
 
       - name: Deploy manifests
         run: |
