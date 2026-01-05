@@ -1,0 +1,21 @@
+# Optional Ingress for environments with an ingress controller (e.g., nginx on minikube/kind)
+# Uncomment and adjust host annotations/class as needed.
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: fifth-app
+#   namespace: devops-demo
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+# spec:
+#   rules:
+#     - host: fifth-app.local
+#       http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: fifth-app
+#                 port:
+#                   number: 80

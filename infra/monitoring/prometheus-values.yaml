@@ -1,0 +1,53 @@
+alertmanager:
+  enabled: false
+
+server:
+  persistentVolume:
+    enabled: false
+  service:
+    type: ClusterIP
+  extraScrapeConfigs:
+    - job_name: fifth-app
+      metrics_path: /actuator/prometheus
+      scrape_interval: 15s
+      scheme: http
+      static_configs:
+        - targets:
+            - fifth-app.devops-demo.svc.cluster.local:80
+          labels:
+            app: fifth-app
+
+serverFiles:
+  alerts:
+    groups:
+      - name: fifth-app-alerts
+        rules:
+          - alert: AppDown
+            expr: |
+              absent(up{job="fifth-app"}) or (up{job="fifth-app"} == 0)
+            for: 2m
+            labels:
+              severity: critical
+            annotations:
+              summary: "fifth-app appears down or unreachable"
+              description: "Prometheus scrape for job fifth-app is missing or reporting down for more than 2 minutes."
+          - alert: HighErrorRate
+            expr: |
+              sum(rate(http_server_requests_seconds_count{job="fifth-app",outcome="SERVER_ERROR"}[5m])) /
+              sum(rate(http_server_requests_seconds_count{job="fifth-app"}[5m])) > 0.05
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High 5xx error rate on fifth-app"
+              description: "More than 5% of requests are 5xx over the last 5 minutes."
+          - alert: HighLatencyP95
+            expr: |
+              histogram_quantile(0.95, sum by (le) (rate(http_server_requests_seconds_bucket{job="fifth-app"}[5m]))) > 0.75
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High p95 latency on fifth-app"
+              description: "p95 HTTP latency is above 750ms over the last 10 minutes."
+  rules: {}

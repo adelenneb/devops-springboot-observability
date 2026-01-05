@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    image: fifth-app:local
+    ports:
+      - "8080:8080"
+    environment:
+      - JAVA_OPTS=-Xms256m -Xmx512m
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    profiles: [monitoring]
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/monitoring/prometheus-values.yaml:/etc/prometheus/prometheus.yml:ro
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    profiles: [monitoring]
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./infra/monitoring/grafana-dashboard.json:/etc/grafana/provisioning/dashboards/dashboard.json:ro
+    depends_on:
+      - prometheus
+    restart: unless-stopped

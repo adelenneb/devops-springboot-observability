@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fifth-app
+  namespace: devops-demo
+  labels:
+    app: fifth-app
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/path: /actuator/prometheus
+    prometheus.io/port: "8080"
+    prometheus.io/scheme: http
+spec:
+  type: ClusterIP
+  selector:
+    app: fifth-app
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
