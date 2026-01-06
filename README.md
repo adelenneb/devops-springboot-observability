@@ -1,7 +1,7 @@
 # DevOps Demo Mono-Repo
 [![CI](https://github.com/adelenneb/devops-springboot-observability/actions/workflows/ci.yml/badge.svg)](https://github.com/adelenneb/devops-springboot-observability/actions/workflows/ci.yml)
 [![CD](https://github.com/adelenneb/devops-springboot-observability/actions/workflows/cd.yml/badge.svg)](https://github.com/adelenneb/devops-springboot-observability/actions/workflows/cd.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
 
 Minimal Spring Boot 3 + Java 21 service with Docker/Kubernetes deployment, CI/CD via GitHub Actions, and Prometheus/Grafana monitoring. Tailored for local clusters (kind/minikube) and GHCR publishing.
 
